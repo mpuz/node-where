@@ -9,7 +9,7 @@ var Result = require('./lib/result');
 /*
  * callback: fn(err, result);
  */
-var is = function(ipOrAddress, callback) {
+var is = function(ipOrAddress, apikey, callback) {
   var locator;
   var opts;
 
@@ -18,7 +18,7 @@ var is = function(ipOrAddress, callback) {
   } else if (isIP(ipOrAddress)) {
     locator = new IP(ipOrAddress);
   } else {
-    locator = new Address(ipOrAddress);
+    locator = new Address(ipOrAddress, apikey);
   }
 
   opts = {
@@ -28,9 +28,11 @@ var is = function(ipOrAddress, callback) {
   };
 
   request(opts, function(err, res, body) {
-    if (err) {
+      if (err) {
       return callback(err);
-    }
+      }
+
+      console.log(body);
 
     callback(null, locator.buildResult(body));
   });
